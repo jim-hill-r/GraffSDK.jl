@@ -11,7 +11,7 @@ include("0_Initialization.jl")
 # 1a. Create a Configuration
 config = loadGraffConfig("synchronyConfig.json")
 #Create a hexagonal sessions
-config.sessionId = "HexDemoSample1"
+config.sessionId = "HexDemoSample14"
 println(getGraffConfig())
 
 # 1b. Check the credentials and the service status
@@ -46,7 +46,6 @@ else
 end
 println(session)
 
-
 # 4. Drive around in a hexagon
 imgRequest = DataHelpers.readFileIntoDataRequest("pexels-photo-1004665.jpeg", "TestImage", "Pretty neat public domain image", "image/jpeg");
 println(" - Adding hexagonal driving pattern to session...")
@@ -56,9 +55,9 @@ println(" - Adding hexagonal driving pattern to session...")
     println(" - Measurement $i: Adding new odometry measurement '$deltaMeasurement'...")
     newOdometryMeasurement = AddOdometryRequest(deltaMeasurement, pOdo)
     @time @show addOdoResponse = addOdometryMeasurement(newOdometryMeasurement)
-    println("  - Adding image data to the pose...")
+    # println("  - Adding image data to the pose...")
     # Adding image data
-    addOrUpdateDataElement(addOdoResponse.variable, imgRequest)
+    # addOrUpdateDataElement(addOdoResponse.variable, imgRequest)
 end
 
 # # 5. Now retrieve the dataset
@@ -89,10 +88,12 @@ putReady(true)
 
 # 8. Let's check on the solver updates.
 sessionLatest = getSession()
+println(sessionLatest)
 while session.lastSolvedTimestamp != sessionLatest.lastSolvedTimestamp
     println("Comparing latest session solver timestamp $(sessionLatest.lastSolvedTimestamp) with original $(session.lastSolvedTimestamp) - still the same so sleeping for 2 seconds")
     sleep(2)
     sessionLatest = getSession()
+    println(sessionLatest)
 end
 
 # 9. Great, solver has updated it! We can render this.
